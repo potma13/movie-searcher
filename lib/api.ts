@@ -16,6 +16,7 @@ const MOCK_MOVIES: MovieResponse = {
       release_date: '2010-07-16',
       vote_average: 8.4,
       genre_ids: [28, 878, 12],
+      isMock: true,
     },
     {
       id: 2,
@@ -26,6 +27,7 @@ const MOCK_MOVIES: MovieResponse = {
       release_date: '1999-12-10',
       vote_average: 8.5,
       genre_ids: [18, 14, 80],
+      isMock: true,
     },
     {
       id: 3,
@@ -36,6 +38,7 @@ const MOCK_MOVIES: MovieResponse = {
       release_date: '1994-09-23',
       vote_average: 8.7,
       genre_ids: [18, 80],
+      isMock: true,
     },
     {
       id: 4,
@@ -46,6 +49,7 @@ const MOCK_MOVIES: MovieResponse = {
       release_date: '1972-03-24',
       vote_average: 8.7,
       genre_ids: [18, 80],
+      isMock: true,
     },
     {
       id: 5,
@@ -56,6 +60,7 @@ const MOCK_MOVIES: MovieResponse = {
       release_date: '2001-12-19',
       vote_average: 8.4,
       genre_ids: [12, 14, 28],
+      isMock: true,
     },
   ],
   total_pages: 1,

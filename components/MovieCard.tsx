@@ -15,7 +15,7 @@ interface MovieCardProps {
 
 export function MovieCard({ movie }: MovieCardProps) {
   const posterUrl =
-    movie.poster_path && !movie.poster_path.startsWith('/')
+    movie.poster_path && !movie.isMock
       ? `https://image.tmdb.org/t/p/w200${movie.poster_path}`
       : '/poster.jpg';
 
