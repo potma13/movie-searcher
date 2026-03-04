@@ -1,11 +1,8 @@
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
 import { ConfigProvider } from 'antd';
 import ruRU from 'antd/locale/ru_RU';
 import 'antd/dist/reset.css';
 import './styles/globals.css';
-
-const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: 'Movie Search App',
@@ -19,7 +16,14 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ru">
-      <body className={inter.className}>
+      <body
+        style={{
+          margin: 0,
+          padding: 0,
+          fontFamily:
+            '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+        }}
+      >
         <ConfigProvider locale={ruRU}>{children}</ConfigProvider>
       </body>
     </html>
