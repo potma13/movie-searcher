@@ -73,18 +73,20 @@ export async function searchMovies(
 
   try {
     console.log('Пытаемся получить данные из TMDB API...');
-    
+
     const response = await fetch(
       `${BASE_URL}/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(query)}&language=ru-RU`
     );
 
     if (!response.ok) {
-      console.log(`API вернул ошибку ${response.status}, используем тестовые данные`);
+      console.log(
+        `API вернул ошибку ${response.status}, используем тестовые данные`
+      );
       return MOCK_MOVIES;
     }
 
     const data = await response.json();
-    
+
     // если API вернул пустой результат, показываем тестовые
     if (!data.results || data.results.length === 0) {
       console.log('API вернул пустой результат, используем тестовые данные');
@@ -93,7 +95,7 @@ export async function searchMovies(
 
     console.log(`Загружено ${data.results.length} фильмов из API`);
     return data;
-  } catch (error) {
+  } catch {
     console.log('Ошибка подключения к API, используем тестовые данные');
     return MOCK_MOVIES;
   }

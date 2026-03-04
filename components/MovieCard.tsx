@@ -1,3 +1,5 @@
+'use client';
+
 import { Card, Rate, Typography } from 'antd';
 import Image from 'next/image';
 import { Movie } from '@/types/movie';
@@ -19,14 +21,17 @@ export function MovieCard({ movie }: MovieCardProps) {
 
   return (
     <Card style={{ marginBottom: 16 }}>
-      <div style={{ display: 'flex', gap: 16 }}>
-        <Image
-          src={posterUrl}
-          alt={movie.title}
-          width={150}
-          height={220}
-          style={{ objectFit: 'cover' }}
-        />
+      <div className="movie-card" style={{ display: 'flex', gap: 16 }}>
+        <div className="poster-wrapper" style={{ flexShrink: 0, width: 150 }}>
+          <Image
+            src={posterUrl}
+            alt={movie.title}
+            width={150}
+            height={220}
+            className="poster-image"
+            style={{ objectFit: 'cover' }}
+          />
+        </div>
 
         <div style={{ flex: 1 }}>
           <Typography.Title level={4} style={{ marginBottom: 4 }}>
