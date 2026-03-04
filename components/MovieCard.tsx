@@ -1,13 +1,8 @@
-'use client';
-
-import Card from 'antd/es/card';
-import Rate from 'antd/es/rate';
-import Text from 'antd/es/typography/Text';
+import { Card, Rate, Typography } from 'antd';
 import Image from 'next/image';
 import { Movie } from '@/types/movie';
-import { truncateText } from '@/lib/utils';
-import { format } from 'date-fns';
-import { ru } from 'date-fns/locale';
+
+const { Text } = Typography;
 
 interface MovieCardProps {
   movie: Movie;
@@ -19,35 +14,36 @@ export function MovieCard({ movie }: MovieCardProps) {
     : 'https://via.placeholder.com/200x300?text=No+Poster';
 
   const releaseDate = movie.release_date
-    ? format(new Date(movie.release_date), 'd MMMM yyyy', { locale: ru })
+    ? new Date(movie.release_date).toLocaleDateString('ru-RU')
     : 'Дата неизвестна';
 
   return (
-    <Card
-      hoverable
-      cover={
+    <Card style={{ marginBottom: 16 }}>
+      <div style={{ display: 'flex', gap: 16 }}>
         <Image
-          alt={movie.title}
           src={posterUrl}
-          width={240}
-          height={300}
+          alt={movie.title}
+          width={150}
+          height={220}
           style={{ objectFit: 'cover' }}
         />
-      }
-      style={{ width: 240, margin: '12px' }}
-    >
-      <Card.Meta
-        title={movie.title}
-        description={
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-            <Text type="secondary">{releaseDate}</Text>
-            <Rate disabled defaultValue={movie.vote_average / 2} allowHalf />
-            <Text>
-              {truncateText(movie.overview || 'Описание отсутствует', 100)}
-            </Text>
-          </div>
-        }
-      />
+
+        <div style={{ flex: 1 }}>
+          <Typography.Title level={4} style={{ marginBottom: 4 }}>
+            {movie.title}
+          </Typography.Title>
+
+          <Text type="secondary">{releaseDate}</Text>
+
+          <div style={{ margin: '8px 0' }} />
+
+          <Rate disabled defaultValue={movie.vote_average / 2} />
+
+          <Typography.Paragraph style={{ marginTop: 8 }}>
+            {movie.overview || 'Описание отсутствует'}
+          </Typography.Paragraph>
+        </div>
+      </div>
     </Card>
   );
 }

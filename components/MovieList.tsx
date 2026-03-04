@@ -10,9 +10,9 @@ interface MovieListProps {
 
 export function MovieList({ movies }: MovieListProps) {
   return (
-    <Row gutter={[16, 16]} justify="center">
+    <Row gutter={[24, 24]}>
       {movies.map((movie) => (
-        <Col key={movie.id}>
+        <Col key={movie.id} xs={24} md={12}>
           <MovieCard movie={movie} />
         </Col>
       ))}

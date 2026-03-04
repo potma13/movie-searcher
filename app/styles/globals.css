@@ -1,0 +1,31 @@
+.movie-card {
+  display: flex;
+  gap: 16px;
+}
+
+.poster {
+  width: 100px;
+  height: 150px;
+  object-fit: cover;
+}
+
+.content {
+  flex: 1;
+}
+
+.overview {
+  margin-top: 8px;
+}
+
+@media (max-width: 500px) {
+
+  .movie-card {
+    flex-direction: column;
+  }
+
+  .poster {
+    width: 100%;
+    height: auto;
+  }
+
+}
