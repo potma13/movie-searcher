@@ -65,6 +65,11 @@ const MOCK_MOVIES: MovieResponse = {
 export async function searchMovies(
   query: string = 'return'
 ): Promise<MovieResponse> {
+  // добавляем проверку на этап сборки Next.js
+  if (process.env.NEXT_PHASE === 'phase-production-build') {
+    return MOCK_MOVIES;
+  }
+
   // без моков, только реальные данные
   if (process.env.NODE_ENV === 'production') {
     if (!API_KEY || !BASE_URL) {
