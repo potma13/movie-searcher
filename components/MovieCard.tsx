@@ -43,6 +43,8 @@ export function MovieCard({ movie }: MovieCardProps) {
             {movie.title}
           </Typography.Title>
 
+          <div className="movie-score">{movie.vote_average.toFixed(1)}</div>
+
           <Text className="movie-date">{releaseDate}</Text>
 
           <div className="movie-genres">
@@ -56,7 +58,7 @@ export function MovieCard({ movie }: MovieCardProps) {
           </Typography.Paragraph>
 
           <div className="movie-rating">
-            <Rate disabled defaultValue={movie.vote_average / 2} />
+            <Rate disabled count={10} value={movie.vote_average} />
           </div>
         </div>
       </div>
