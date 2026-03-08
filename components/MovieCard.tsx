@@ -33,7 +33,7 @@ export function MovieCard({ movie }: MovieCardProps) {
             src={posterUrl}
             alt={movie.title}
             width={150}
-            height={225}
+            height={260}
             className="poster-image"
           />
         </div>
@@ -48,13 +48,13 @@ export function MovieCard({ movie }: MovieCardProps) {
           <Text className="movie-date">{releaseDate}</Text>
 
           <div className="movie-genres">
-            {placeholderGenres.map((genre, index) => (
+            {placeholderGenres.slice(0, 3).map((genre, index) => (
               <Tag key={index}>{genre}</Tag>
             ))}
           </div>
 
           <Typography.Paragraph className="movie-description">
-            {truncateText(movie.overview || 'Описание отсутствует', 75)}
+            {truncateText(movie.overview || 'Описание отсутствует', 180)}
           </Typography.Paragraph>
 
           <div className="movie-rating">
