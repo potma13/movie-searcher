@@ -33,7 +33,7 @@
 .movie-rating {
   margin-top: auto;
   font-size: 18px;
-  white-space: nowrap;
+  min-width: 0;
 }
 
 .ant-rate {
@@ -65,7 +65,7 @@
 .movie-description {
   font-size: 14px;
   margin-bottom: 0;
-  max-height: 85px;
+  max-height: auto;
   overflow: hidden;
 }
 
