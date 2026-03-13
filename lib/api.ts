@@ -75,44 +75,43 @@ const MOCK_MOVIES: MovieResponse = {
     },
   ],
   total_pages: 1,
-  total_results: 5,
+  total_results: 6,
 };
 
 export async function searchMovies(
   query: string = 'return'
 ): Promise<MovieResponse> {
-  // проверяем, есть ли ключи API
-  if (!API_KEY || !BASE_URL) {
-    console.log('API ключ или URL не настроены, используем тестовые данные');
+  const isDev = process.env.NODE_ENV === 'development';
+
+  if (isDev) {
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    console.log('DEV MODE: используем мок данные');
     return MOCK_MOVIES;
   }
 
-  try {
-    console.log('Пытаемся получить данные из TMDB API...');
+  if (!API_KEY || !BASE_URL) {
+    throw new Error('TMDB API не настроен');
+  }
 
+  try {
     const response = await fetch(
-      `${BASE_URL}/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(query)}&language=ru-RU`
+      `${BASE_URL}/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(query)}&language=ru-RU`,
+      { cache: 'no-store' }
     );
 
     if (!response.ok) {
-      console.log(
-        `API вернул ошибку ${response.status}, используем тестовые данные`
-      );
-      return MOCK_MOVIES;
+      throw new Error(`Ошибка API: ${response.status}`);
     }
 
     const data = await response.json();
 
-    // если API вернул пустой результат, показываем тестовые
     if (!data.results || data.results.length === 0) {
-      console.log('API вернул пустой результат, используем тестовые данные');
-      return MOCK_MOVIES;
+      throw new Error('Фильмы не найдены');
     }
 
-    console.log(`Загружено ${data.results.length} фильмов из API`);
     return data;
-  } catch {
-    console.log('Ошибка подключения к API, используем тестовые данные');
-    return MOCK_MOVIES;
+  } catch (error) {
+    console.error(error);
+    throw new Error('Не удалось загрузить фильмы');
   }
 }
