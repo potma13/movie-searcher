@@ -1,6 +1,8 @@
 import { searchMovies } from '@/lib/api';
 import { MovieList } from '@/components/MovieList';
 
+export const dynamic = 'force-dynamic';
+
 export default async function HomePage() {
   const data = await searchMovies('return');
   const movies = data.results || [];
