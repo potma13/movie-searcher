@@ -12,6 +12,7 @@ export function MovieSearch() {
   const [movies, setMovies] = useState<Movie[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
 
@@ -21,10 +22,12 @@ export function MovieSearch() {
 
     try {
       const data = await searchMovies(searchQuery, pageNumber);
+
       setMovies(data.results || []);
       setTotal(data.total_results || 0);
     } catch (err: unknown) {
       setMovies([]);
+
       if (err instanceof Error) {
         setError(err.message);
       } else {
@@ -61,7 +64,7 @@ export function MovieSearch() {
   return (
     <>
       <Input
-        placeholder="Введите название фильма..."
+        placeholder="Type to search..."
         size="large"
         onChange={(e) => handleSearch(e.target.value)}
         style={{ marginBottom: 24 }}
