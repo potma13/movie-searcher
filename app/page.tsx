@@ -1,24 +1,18 @@
-import { searchMovies } from '@/lib/api';
-import { MovieList } from '@/components/MovieList';
+import { AppTabs } from '@/components/AppTabs';
 
-export const dynamic = 'force-dynamic';
-
-export default async function HomePage() {
-  const data = await searchMovies('return');
-  const movies = data.results || [];
-
+export default function HomePage() {
   return (
     <div style={{ backgroundColor: '#F7F7F7', minHeight: '100vh' }}>
       <main
         style={{
-          padding: '24px',
+          padding: '0px 24px 24px 24px',
           maxWidth: '1200px',
           margin: '0 auto',
           backgroundColor: 'white',
           minHeight: '100vh',
         }}
       >
-        <MovieList movies={movies} />
+        <AppTabs />
       </main>
     </div>
   );
