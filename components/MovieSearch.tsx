@@ -50,6 +50,7 @@ export function MovieSearch() {
 
   useEffect(() => {
     fetchMovies(query, page);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
 
   const handleSearch = (value: string) => {
