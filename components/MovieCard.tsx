@@ -1,6 +1,6 @@
 'use client';
 
-import { Card, Rate, Typography, Tag } from 'antd';
+import { Card, Rate, Typography, Tag, Empty } from 'antd';
 import Image from 'next/image';
 import { Movie } from '@/types/movie';
 import { truncateText } from '@/lib/utils';
@@ -14,10 +14,7 @@ interface MovieCardProps {
 }
 
 export function MovieCard({ movie }: MovieCardProps) {
-  const posterUrl =
-    movie.poster_path && !movie.isMock
-      ? `https://image.tmdb.org/t/p/w200${movie.poster_path}`
-      : '/poster.jpg';
+  const hasPoster = movie.poster_path && !movie.isMock;
 
   const releaseDate = movie.release_date
     ? format(new Date(movie.release_date), 'd MMMM yyyy', { locale: ru })
@@ -29,13 +26,32 @@ export function MovieCard({ movie }: MovieCardProps) {
     <Card className="movie-card">
       <div className="movie-card-wrapper">
         <div className="poster-wrapper">
-          <Image
-            src={posterUrl}
-            alt={movie.title}
-            width={150}
-            height={260}
-            className="poster-image"
-          />
+          {hasPoster ? (
+            <Image
+              src={`https://image.tmdb.org/t/p/w200${movie.poster_path}`}
+              alt={movie.title}
+              width={150}
+              height={260}
+              className="poster-image"
+            />
+          ) : (
+            <div
+              style={{
+                width: '100%',
+                height: '100%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                backgroundColor: '#f5f5f5',
+              }}
+            >
+              <Empty
+                image={Empty.PRESENTED_IMAGE_SIMPLE}
+                description="Нет постера"
+                style={{ margin: 0 }}
+              />
+            </div>
+          )}
         </div>
 
         <div className="movie-content">
