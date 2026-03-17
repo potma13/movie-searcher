@@ -1,28 +1,32 @@
 import { MovieResponse } from '@/types/movie';
 
-const API_KEY = process.env.TMDB_API_KEY;
-const BASE_URL = process.env.TMDB_API_URL;
-
 export async function searchMovies(
-  query: string = 'return',
+  query: string = 'Гарри Поттер',
   page: number = 1
 ): Promise<MovieResponse> {
-  if (!API_KEY || !BASE_URL) {
-    throw new Error('TMDB API не настроен');
+  try {
+    const response = await fetch(
+      `/api/movies?query=${encodeURIComponent(query)}&page=${page}`,
+      {
+        cache: 'no-store',
+      }
+    );
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || `Ошибка API: ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    if (!data.results) {
+      throw new Error('Фильмы не найдены');
+    }
+
+    return data;
+  } catch (err: unknown) {
+    console.error(err);
+    if (err instanceof Error) return Promise.reject(err);
+    return Promise.reject(new Error('Не удалось загрузить фильмы'));
   }
-
-  const response = await fetch(
-    `${BASE_URL}/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(
-      query
-    )}&page=${page}&language=ru-RU`,
-    { cache: 'no-store' }
-  );
-
-  if (!response.ok) {
-    throw new Error(`Ошибка API: ${response.status}`);
-  }
-
-  const data = await response.json();
-
-  return data;
 }
