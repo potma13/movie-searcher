@@ -12,7 +12,6 @@ export function MovieSearch() {
   const [movies, setMovies] = useState<Movie[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
 
@@ -22,12 +21,10 @@ export function MovieSearch() {
 
     try {
       const data = await searchMovies(searchQuery, pageNumber);
-
       setMovies(data.results || []);
       setTotal(data.total_results || 0);
     } catch (err: unknown) {
       setMovies([]);
-
       if (err instanceof Error) {
         setError(err.message);
       } else {
@@ -49,7 +46,7 @@ export function MovieSearch() {
 
   useEffect(() => {
     fetchMovies(query, page);
-  }, []);
+  }, [query, page]);
 
   const handleSearch = (value: string) => {
     setQuery(value);
@@ -64,28 +61,30 @@ export function MovieSearch() {
   return (
     <>
       <Input
-        placeholder="Type to search..."
+        placeholder="Введите название фильма..."
         size="large"
         onChange={(e) => handleSearch(e.target.value)}
         style={{ marginBottom: 24 }}
       />
 
       {loading ? (
-        <div className="loading-container">
+        <div style={{ textAlign: 'center', padding: '50px 0' }}>
           <Spin size="large" description="Загрузка фильмов..." />
         </div>
       ) : error ? (
-        <div
-          style={{
-            maxWidth: 200,
-          }}
-        >
+        <div style={{ maxWidth: 250 }}>
           <Alert type="error" title={error} showIcon />
         </div>
       ) : movies.length === 0 ? (
         <div
-          className="empty-container"
-          style={{ textAlign: 'center', padding: '50px 0' }}
+          style={{
+            textAlign: 'center',
+            padding: '50px 0',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
         >
           <Empty description="Фильмы не найдены" />
         </div>
