@@ -12,7 +12,7 @@ export default function Error({
   return (
     <div className="error-container">
       <Alert
-        message="Ошибка загрузки фильмов"
+        title="Ошибка загрузки фильмов"
         description={error.message}
         type="error"
         showIcon
