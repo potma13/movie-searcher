@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
-  const query = searchParams.get('query') || 'return';
+  const query = searchParams.get('query') || 'Гарри Поттер';
   const page = searchParams.get('page') || '1';
 
   const API_KEY = process.env.TMDB_API_KEY;
