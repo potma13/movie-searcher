@@ -8,7 +8,7 @@ import { searchMovies } from '@/lib/api';
 import { MovieList } from './MovieList';
 
 export function MovieSearch() {
-  const [query, setQuery] = useState('return');
+  const [query, setQuery] = useState('Гарри Поттер');
   const [movies, setMovies] = useState<Movie[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -95,14 +95,17 @@ export function MovieSearch() {
         <>
           <MovieList movies={movies.slice(0, 6)} />
 
-          <Pagination
-            current={page}
-            total={total}
-            pageSize={6}
-            onChange={handlePageChange}
-            showSizeChanger={false}
-            style={{ textAlign: 'center', marginTop: 30 }}
-          />
+          <div
+            style={{ display: 'flex', justifyContent: 'center', marginTop: 30 }}
+          >
+            <Pagination
+              current={page}
+              total={total}
+              pageSize={6}
+              onChange={handlePageChange}
+              showSizeChanger={false}
+            />
+          </div>
         </>
       )}
     </>
