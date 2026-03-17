@@ -42,17 +42,17 @@ export function MovieSearch() {
     () =>
       debounce((value: string) => {
         setPage(1);
+        setQuery(value);
         fetchMovies(value, 1);
-      }, 500),
+      }, 1000),
     []
   );
 
   useEffect(() => {
     fetchMovies(query, page);
-  }, [query, page]);
+  }, [page]);
 
   const handleSearch = (value: string) => {
-    setQuery(value);
     debouncedSearch(value);
   };
 
