@@ -3,7 +3,7 @@ import { Spin } from 'antd';
 export default function Loading() {
   return (
     <div className="loading-container">
-      <Spin size="large" tip="Загрузка фильмов..." />
+      <Spin size="large" description="Загрузка фильмов..." />
     </div>
   );
 }
