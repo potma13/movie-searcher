@@ -44,7 +44,7 @@ export function MovieSearch() {
         setPage(1);
         setQuery(value);
         fetchMovies(value, 1);
-      }, 1000),
+      }, 500),
     []
   );
 
