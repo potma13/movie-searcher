@@ -16,14 +16,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ru">
-      <body
-        style={{
-          margin: 0,
-          padding: 0,
-          fontFamily:
-            '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
-        }}
-      >
+      <body>
         <ConfigProvider locale={ruRU}>{children}</ConfigProvider>
       </body>
     </html>
