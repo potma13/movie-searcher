@@ -7,9 +7,7 @@ export async function searchMovies(
   try {
     const response = await fetch(
       `/api/movies?query=${encodeURIComponent(query)}&page=${page}`,
-      {
-        cache: 'no-store',
-      }
+      { cache: 'no-store' }
     );
 
     if (!response.ok) {
@@ -19,14 +17,14 @@ export async function searchMovies(
 
     const data = await response.json();
 
-    if (!data.results) {
-      throw new Error('Фильмы не найдены');
-    }
-
     return data;
   } catch (err: unknown) {
     console.error(err);
-    if (err instanceof Error) return Promise.reject(err);
-    return Promise.reject(new Error('Не удалось загрузить фильмы'));
+
+    if (err instanceof Error) {
+      throw err;
+    }
+
+    throw new Error('Не удалось загрузить фильмы');
   }
 }
