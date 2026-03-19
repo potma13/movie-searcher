@@ -59,7 +59,6 @@ export function MovieSearch() {
 
   const handlePageChange = (pageNumber: number) => {
     setPage(pageNumber);
-    fetchMovies(query, pageNumber);
   };
 
   return (
@@ -94,7 +93,7 @@ export function MovieSearch() {
         </div>
       ) : (
         <>
-          <MovieList movies={movies.slice(0, 6)} />
+          <MovieList movies={movies} />
 
           <div
             style={{ display: 'flex', justifyContent: 'center', marginTop: 30 }}
@@ -102,7 +101,7 @@ export function MovieSearch() {
             <Pagination
               current={page}
               total={total}
-              pageSize={6}
+              pageSize={20}
               onChange={handlePageChange}
               showSizeChanger={false}
             />
