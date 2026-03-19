@@ -16,23 +16,18 @@ export function MovieSearch() {
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
 
-  const fetchMovies = async (searchQuery: string, pageNumber: number) => {
+  const fetchMovies = async (searchQuery: string) => {
     setLoading(true);
     setError(null);
 
     try {
-      const data = await searchMovies(searchQuery, pageNumber);
-
+      const data = await searchMovies(searchQuery);
       setMovies(data.results || []);
       setTotal(data.total_results || 0);
     } catch (err: unknown) {
       setMovies([]);
-
-      if (err instanceof Error) {
-        setError(err.message);
-      } else {
-        setError('Произошла ошибка при загрузке фильмов');
-      }
+      if (err instanceof Error) setError(err.message);
+      else setError('Произошла ошибка при загрузке фильмов');
     } finally {
       setLoading(false);
     }
@@ -43,15 +38,15 @@ export function MovieSearch() {
       debounce((value: string) => {
         setPage(1);
         setQuery(value);
-        fetchMovies(value, 1);
+        fetchMovies(value);
       }, 500),
     []
   );
 
   useEffect(() => {
-    fetchMovies(query, page);
+    fetchMovies(query);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page]);
+  }, []);
 
   const handleSearch = (value: string) => {
     debouncedSearch(value);
@@ -59,7 +54,10 @@ export function MovieSearch() {
 
   const handlePageChange = (pageNumber: number) => {
     setPage(pageNumber);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
+
+  const moviesToShow = movies.slice((page - 1) * 6, page * 6);
 
   return (
     <>
@@ -78,7 +76,7 @@ export function MovieSearch() {
         <div style={{ maxWidth: 250 }}>
           <Alert type="error" title={error} showIcon />
         </div>
-      ) : movies.length === 0 ? (
+      ) : moviesToShow.length === 0 ? (
         <div
           style={{
             textAlign: 'center',
@@ -93,15 +91,15 @@ export function MovieSearch() {
         </div>
       ) : (
         <>
-          <MovieList movies={movies} />
+          <MovieList movies={moviesToShow} />
 
           <div
             style={{ display: 'flex', justifyContent: 'center', marginTop: 30 }}
           >
             <Pagination
               current={page}
-              total={total}
-              pageSize={20}
+              total={movies.length}
+              pageSize={6}
               onChange={handlePageChange}
               showSizeChanger={false}
             />
