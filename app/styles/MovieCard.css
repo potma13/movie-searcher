@@ -39,6 +39,7 @@
 }
 
 .movie-title {
+  margin-top: 0 !important;
   margin-bottom: 4px !important;
   text-overflow: ellipsis;
   padding-right: 40px;

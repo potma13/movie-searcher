@@ -1,9 +1,10 @@
-import { Spin } from 'antd';
-
 export default function Loading() {
   return (
     <div className="loading-container">
-      <Spin size="large" description="Загрузка фильмов..." />
+      <div className="loading-indicator" role="status" aria-live="polite">
+        <span className="loading-spinner" aria-hidden="true" />
+        <span className="loading-text">Загрузка фильмов...</span>
+      </div>
     </div>
   );
 }

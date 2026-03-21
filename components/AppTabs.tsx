@@ -1,14 +1,17 @@
 'use client';
 
 import { Tabs } from 'antd';
-import { MovieSearch } from './MovieSearch';
 
-export function AppTabs() {
+interface AppTabsProps {
+  searchContent: React.ReactNode;
+}
+
+export function AppTabs({ searchContent }: AppTabsProps) {
   const items = [
     {
       key: '1',
       label: 'Search',
-      children: <MovieSearch />,
+      children: searchContent,
     },
     {
       key: '2',

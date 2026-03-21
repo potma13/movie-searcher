@@ -1,40 +1,18 @@
 import { NextResponse } from 'next/server';
+import { searchMovies } from '@/lib/api';
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const query = searchParams.get('query') || 'Гарри Поттер';
-  const page = searchParams.get('page') || '1';
-
-  const API_KEY = process.env.TMDB_API_KEY;
-  const BASE_URL = process.env.TMDB_API_URL;
-
-  if (!API_KEY || !BASE_URL) {
-    return NextResponse.json(
-      { error: 'TMDB API не настроен' },
-      { status: 500 }
-    );
-  }
+  const page = Number(searchParams.get('page') || '1');
 
   try {
-    const res = await fetch(
-      `${BASE_URL}/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(query)}&page=${page}&language=ru-RU`
-    );
-
-    if (!res.ok) {
-      return NextResponse.json(
-        { error: `Ошибка API: ${res.status}` },
-        { status: res.status }
-      );
-    }
-
-    const data = await res.json();
-
+    const data = await searchMovies(query, page);
     return NextResponse.json(data);
-  } catch (err) {
-    console.error('Ошибка при fetch фильмов:', err);
-    return NextResponse.json(
-      { error: 'Не удалось загрузить фильмы' },
-      { status: 500 }
-    );
+  } catch (error) {
+    const message =
+      error instanceof Error ? error.message : 'Не удалось загрузить фильмы';
+
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

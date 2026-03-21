@@ -14,7 +14,7 @@ interface MovieCardProps {
 }
 
 export function MovieCard({ movie }: MovieCardProps) {
-  const hasPoster = movie.poster_path && !movie.isMock;
+  const hasPoster = movie.poster_path;
 
   const releaseDate = movie.release_date
     ? format(new Date(movie.release_date), 'd MMMM yyyy', { locale: ru })
