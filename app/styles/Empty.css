@@ -11,3 +11,21 @@
 .empty-container .ant-empty-image {
   margin-bottom: 16px;
 }
+
+.error-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 480px;
+  z-index: 1000;
+}
+
+.error-container .ant-alert-action {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 12px;
+}
+
+.error-container .ant-btn {
+  margin-left: auto;
+}
