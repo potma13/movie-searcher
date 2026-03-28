@@ -6,6 +6,7 @@ export interface Movie {
   release_date: string;
   vote_average: number;
   genre_ids: number[];
+  rating?: number;
 }
 
 export interface MovieResponse {
@@ -13,4 +14,13 @@ export interface MovieResponse {
   results: Movie[];
   total_pages: number;
   total_results: number;
+}
+
+export interface Genre {
+  id: number;
+  name: string;
+}
+
+export interface GenreResponse {
+  genres: Genre[];
 }

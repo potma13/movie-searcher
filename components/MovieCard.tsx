@@ -1,26 +1,59 @@
 'use client';
 
-import { Card, Rate, Typography, Tag, Empty } from 'antd';
+import { Card, Rate, Typography, Tag, Empty, message } from 'antd';
 import Image from 'next/image';
 import { Movie } from '@/types/movie';
 import { truncateText } from '@/lib/utils';
 import { format } from 'date-fns';
 import { ru } from 'date-fns/locale';
+import { useGenres } from './GenreProvider';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 const { Text } = Typography;
 
 interface MovieCardProps {
   movie: Movie;
+  guestSessionId: string;
 }
 
-export function MovieCard({ movie }: MovieCardProps) {
+function getRatingColor(value: number) {
+  if (value <= 3) {
+    return '#E90000';
+  }
+
+  if (value <= 5) {
+    return '#E97E00';
+  }
+
+  if (value <= 7) {
+    return '#E9D100';
+  }
+
+  return '#66E900';
+}
+
+export function MovieCard({ movie, guestSessionId }: MovieCardProps) {
   const hasPoster = movie.poster_path;
+  const genres = useGenres();
+  const router = useRouter();
+  const [userRating, setUserRating] = useState<number>(movie.rating ?? 0);
+  const [isRating, setIsRating] = useState(false);
+
+  useEffect(() => {
+    setUserRating(movie.rating ?? 0);
+  }, [movie.rating]);
 
   const releaseDate = movie.release_date
     ? format(new Date(movie.release_date), 'd MMMM yyyy', { locale: ru })
     : 'Дата неизвестна';
 
-  const placeholderGenres = ['боевик', 'драма', 'комедия'];
+  const ratingValue = userRating || movie.vote_average;
+
+  const movieGenres =
+    movie.genre_ids
+      ?.map((genreId) => genres[genreId])
+      .filter((genre): genre is string => Boolean(genre)) || [];
 
   return (
     <Card className="movie-card">
@@ -35,16 +68,7 @@ export function MovieCard({ movie }: MovieCardProps) {
               className="poster-image"
             />
           ) : (
-            <div
-              style={{
-                width: '100%',
-                height: '100%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                backgroundColor: '#f5f5f5',
-              }}
-            >
+            <div className="poster-fallback">
               <Empty
                 image={Empty.PRESENTED_IMAGE_SIMPLE}
                 description="Нет постера"
@@ -59,14 +83,23 @@ export function MovieCard({ movie }: MovieCardProps) {
             {movie.title}
           </Typography.Title>
 
-          <div className="movie-score">{movie.vote_average.toFixed(1)}</div>
+          <div
+            className="movie-score"
+            style={{ borderColor: getRatingColor(ratingValue) }}
+          >
+            {ratingValue.toFixed(1)}
+          </div>
 
           <Text className="movie-date">{releaseDate}</Text>
 
           <div className="movie-genres">
-            {placeholderGenres.slice(0, 3).map((genre, index) => (
-              <Tag key={index}>{genre}</Tag>
-            ))}
+            {movieGenres.length ? (
+              movieGenres
+                .slice(0, 3)
+                .map((genre) => <Tag key={genre}>{genre}</Tag>)
+            ) : (
+              <Tag>Жанр неизвестен</Tag>
+            )}
           </div>
 
           <Typography.Paragraph className="movie-description">
@@ -74,7 +107,43 @@ export function MovieCard({ movie }: MovieCardProps) {
           </Typography.Paragraph>
 
           <div className="movie-rating">
-            <Rate disabled count={10} value={movie.vote_average} />
+            <Rate
+              allowHalf
+              count={10}
+              value={userRating}
+              disabled={isRating}
+              onChange={async (value) => {
+                setIsRating(true);
+
+                const shouldClear = value === 0 || value === userRating;
+                const nextValue = shouldClear ? 0 : value;
+
+                try {
+                  const response = await fetch('/api/rating', {
+                    method: shouldClear ? 'DELETE' : 'POST',
+                    headers: {
+                      'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                      movieId: movie.id,
+                      guestSessionId,
+                      value: nextValue,
+                    }),
+                  });
+
+                  if (!response.ok) {
+                    throw new Error('Не удалось сохранить оценку');
+                  }
+
+                  setUserRating(nextValue);
+                  router.refresh();
+                } catch {
+                  message.error('Не удалось сохранить оценку');
+                } finally {
+                  setIsRating(false);
+                }
+              }}
+            />
           </div>
         </div>
       </div>
