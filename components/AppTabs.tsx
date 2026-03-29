@@ -1,8 +1,10 @@
 'use client';
 
-import { Tabs } from 'antd';
+import { MoonOutlined, SunOutlined } from '@ant-design/icons';
+import { Button, Tabs, Tooltip } from 'antd';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useTransition } from 'react';
+import { useThemeMode } from './ThemeProvider';
 
 interface AppTabsProps {
   searchContent: React.ReactNode;
@@ -19,6 +21,7 @@ export function AppTabs({
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [, startTransition] = useTransition();
+  const { mode, toggleTheme } = useThemeMode();
 
   const items = [
     {
@@ -49,6 +52,22 @@ export function AppTabs({
       size="large"
       items={items}
       style={{ marginBottom: 24 }}
+      tabBarExtraContent={{
+        right: (
+          <Tooltip
+            title={mode === 'dark' ? 'Светлая тема' : 'Темная тема'}
+            placement="left"
+          >
+            <Button
+              aria-label="Переключить тему"
+              type="text"
+              className="theme-toggle"
+              onClick={toggleTheme}
+              icon={mode === 'dark' ? <SunOutlined /> : <MoonOutlined />}
+            />
+          </Tooltip>
+        ),
+      }}
     />
   );
 }

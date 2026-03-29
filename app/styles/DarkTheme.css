@@ -1,0 +1,41 @@
+:root {
+  --app-bg: #f7f7f7;
+  --panel-bg: #ffffff;
+  --text-color: #111111;
+  --search-overlay-bg: rgba(255, 255, 255, 0.6);
+}
+
+[data-theme='dark'] {
+  --app-bg: #111318;
+  --panel-bg: #1a1f2b;
+  --text-color: #f3f6ff;
+  --search-overlay-bg: rgba(17, 19, 24, 0.72);
+}
+
+[data-theme='dark'] .movie-card .ant-card-body {
+  background: #20273a;
+}
+
+[data-theme='dark'] .movie-title,
+[data-theme='dark'] .movie-description,
+[data-theme='dark'] .movie-date,
+[data-theme='dark'] .ant-empty-description,
+[data-theme='dark'] .ant-tabs-tab-btn,
+[data-theme='dark'] .ant-pagination-item a,
+[data-theme='dark'] .ant-tag {
+  color: #f3f6ff !important;
+}
+
+[data-theme='dark'] .ant-tag {
+  background: #2a3350;
+  border-color: #3b4a74;
+}
+
+[data-theme='dark'] .poster-fallback {
+  background-color: #1d1d1d !important;
+}
+
+.theme-toggle {
+  margin-left: 12px;
+  font-size: 18px;
+}

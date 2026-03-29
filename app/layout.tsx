@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
-import { ConfigProvider } from 'antd';
-import ruRU from 'antd/locale/ru_RU';
 import { GenreProvider } from '@/components/GenreProvider';
+import { ThemeProvider } from '@/components/ThemeProvider';
 import { getGenres } from '@/lib/api';
 import { Genre } from '@/types/movie';
 import 'antd/dist/reset.css';
@@ -29,9 +28,9 @@ export default async function RootLayout({
   return (
     <html lang="ru">
       <body>
-        <ConfigProvider locale={ruRU}>
+        <ThemeProvider>
           <GenreProvider genres={genres}>{children}</GenreProvider>
-        </ConfigProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
