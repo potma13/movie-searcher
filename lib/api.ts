@@ -31,6 +31,7 @@ async function ensureResponse(response: Response): Promise<Response> {
   return response;
 }
 
+// кэшируем результаты поиска на 60 секунд для оптимизации
 const fetchMovies = unstable_cache(
   async (query: string, page: number): Promise<MovieResponse> => {
     const { apiKey, baseUrl } = getApiConfig();

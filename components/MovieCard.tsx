@@ -18,18 +18,9 @@ interface MovieCardProps {
 }
 
 function getRatingColor(value: number) {
-  if (value <= 3) {
-    return '#E90000';
-  }
-
-  if (value <= 5) {
-    return '#E97E00';
-  }
-
-  if (value <= 7) {
-    return '#E9D100';
-  }
-
+  if (value <= 3) return '#E90000';
+  if (value <= 5) return '#E97E00';
+  if (value <= 7) return '#E9D100';
   return '#66E900';
 }
 
@@ -40,6 +31,7 @@ export function MovieCard({ movie, guestSessionId }: MovieCardProps) {
   const [userRating, setUserRating] = useState<number>(movie.rating ?? 0);
   const [isRating, setIsRating] = useState(false);
 
+  // синхронизируем рейтинг при обновлении данных
   useEffect(() => {
     setUserRating(movie.rating ?? 0);
   }, [movie.rating]);

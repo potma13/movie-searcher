@@ -26,6 +26,7 @@ interface HomePageProps {
 }
 
 function mergeRatings(movies: Movie[], ratedMovies: Movie[]) {
+  // создаем карту для быстрого поиска рейтинга по id фильма
   const ratingById = new Map(
     ratedMovies.map((ratedMovie) => [ratedMovie.id, ratedMovie.rating])
   );
@@ -37,6 +38,8 @@ function mergeRatings(movies: Movie[], ratedMovies: Movie[]) {
 }
 
 async function localizeRatedMovies(movies: Movie[]) {
+  // загружаем русскоязычные данные для каждого оцененного фильма
+  // т.к. api возвращает только на английском
   return Promise.all(
     movies.map(async (movie) => {
       try {
@@ -68,6 +71,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
 
   let guestSessionId = resolvedSearchParams.guestSessionId;
 
+  // при первом посещении создаем гостевую сессию и перенаправляем с id в url
   if (!guestSessionId) {
     guestSessionId = await createGuestSession();
 
@@ -99,6 +103,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
   try {
     ratedData = await getRatedMovies(guestSessionId, 1);
   } catch (error) {
+    // 404 означает что у пользователя еще нет оценок
     if (error instanceof ApiError && error.status === 404) {
       ratedData = {
         page: 1,

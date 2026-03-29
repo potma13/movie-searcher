@@ -11,6 +11,7 @@ interface GenreProviderProps {
 }
 
 export function GenreProvider({ genres, children }: GenreProviderProps) {
+  // преобразуем массив жанров в объект для быстрого доступа по id
   const genreMap = useMemo(
     () => Object.fromEntries(genres.map((genre) => [genre.id, genre.name])),
     [genres]
