@@ -1,12 +1,11 @@
 import { Alert, Empty } from 'antd';
-import { redirect } from 'next/navigation';
+import { cookies } from 'next/headers';
 import { AppTabs } from '@/components/AppTabs';
 import { MovieList } from '@/components/MovieList';
 import { MovieSearch } from '@/components/MovieSearch';
 import { PaginationControls } from '@/components/Pagination';
 import {
   ApiError,
-  createGuestSession,
   getMovieDetails,
   getRatedMovies,
   searchMovies,
@@ -21,7 +20,6 @@ interface HomePageProps {
     query?: string;
     page?: string;
     tab?: string;
-    guestSessionId?: string;
   }>;
 }
 
@@ -69,20 +67,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
   const currentPage = Math.max(Number(resolvedSearchParams.page) || 1, 1);
   const activeTab = resolvedSearchParams.tab === 'rated' ? 'rated' : 'search';
 
-  let guestSessionId = resolvedSearchParams.guestSessionId;
-
-  // при первом посещении создаем гостевую сессию и перенаправляем с id в url
-  if (!guestSessionId) {
-    guestSessionId = await createGuestSession();
-
-    const params = new URLSearchParams();
-    params.set('guestSessionId', guestSessionId);
-    params.set('tab', activeTab);
-    params.set('page', String(currentPage));
-    params.set('query', query);
-
-    redirect(`/?${params.toString()}`);
-  }
+  const guestSessionId = (await cookies()).get('guestSessionId')?.value || '';
 
   let searchData: MovieResponse | null = null;
   let ratedData: MovieResponse | null = null;
@@ -100,22 +85,23 @@ export default async function HomePage({ searchParams }: HomePageProps) {
     }
   }
 
-  try {
-    ratedData = await getRatedMovies(guestSessionId, 1);
-  } catch (error) {
-    // 404 означает что у пользователя еще нет оценок
-    if (error instanceof ApiError && error.status === 404) {
-      ratedData = {
-        page: 1,
-        results: [],
-        total_pages: 0,
-        total_results: 0,
-      };
-    } else {
-      ratedError =
-        error instanceof Error
-          ? error.message
-          : 'Произошла ошибка при загрузке фильмов';
+  if (guestSessionId) {
+    try {
+      ratedData = await getRatedMovies(guestSessionId, 1);
+    } catch (error) {
+      if (error instanceof ApiError && error.status === 404) {
+        ratedData = {
+          page: 1,
+          results: [],
+          total_pages: 0,
+          total_results: 0,
+        };
+      } else {
+        ratedError =
+          error instanceof Error
+            ? error.message
+            : 'Произошла ошибка при загрузке фильмов';
+      }
     }
   }
 

@@ -103,8 +103,13 @@ export function MovieCard({ movie, guestSessionId }: MovieCardProps) {
               allowHalf
               count={10}
               value={userRating}
-              disabled={isRating}
+              disabled={isRating || !guestSessionId}
               onChange={async (value) => {
+                if (!guestSessionId) {
+                  message.warning('Сессия еще не инициализирована');
+                  return;
+                }
+
                 setIsRating(true);
 
                 const shouldClear = value === 0 || value === userRating;
